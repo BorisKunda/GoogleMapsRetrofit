@@ -31,11 +31,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -142,21 +142,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void build_retrofit_and_get_response(String type) {
 
-        String url = "https://maps.googleapis.com/maps/";
+//        String url = "https://maps.googleapis.com/maps/";
+//
+//
+//
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(url)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
+        RetrofitMaps apiService =
+                ApiClient.getClient().create(RetrofitMaps.class);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitMaps service = retrofit.create(RetrofitMaps.class);
-
-        Call<Example> call = service.getNearbyPlaces(type, latitude + "," + longitude, PROXIMITY_RADIUS);
-
+        Call<Example> call = apiService.getNearbyPlaces(type, latitude + "," + longitude, PROXIMITY_RADIUS);
         call.enqueue(new Callback<Example>() {
             @Override
-            public void onResponse(Response<Example> response, Retrofit retrofit) {
-
+            public void onResponse(Call<Example> call, Response<Example> response) {
                 try {
                     mMap.clear();
                     // This loop will go through all the results and add marker on each location.
@@ -184,12 +186,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     e.printStackTrace();
                 }
             }
+
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(Call<Example> call, Throwable t) {
                 Log.d("onFailure", t.toString());
             }
         });
-
     }
 
     protected synchronized void buildGoogleApiClient() {

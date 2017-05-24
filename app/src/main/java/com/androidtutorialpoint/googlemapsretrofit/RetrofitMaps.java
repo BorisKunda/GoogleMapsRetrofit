@@ -2,9 +2,9 @@ package com.androidtutorialpoint.googlemapsretrofit;
 
 import com.androidtutorialpoint.googlemapsretrofit.POJO.Example;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by navneet on 17/7/16.
